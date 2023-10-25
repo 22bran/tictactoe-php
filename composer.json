@@ -1,0 +1,22 @@
+{
+    "name": "22bran/tictactoe-php",
+    "description": "An advanced TicTacToe game in PHP, designed as a platform to explore new PHP versions and game algorithms. Features customizable board sizes, win conditions, AI-controlled players, and move recommendations. Built without relying on specific frameworks, it emphasizes a minimalistic approach with a straightforward routing mechanism.",
+    "license": "MIT",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "TicTacToe\\": "src/"
+        },
+        "classmap": [
+            "src/"
+        ]
+    },
+    "require": {
+        "league/plates": "^3.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9",
+        "phpstan/phpstan": "^1.10",
+        "friendsofphp/php-cs-fixer": "^3.34"
+    }
+}

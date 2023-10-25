@@ -9,8 +9,7 @@ readonly class AllDirectionsScoreDto
         public ScoreDto $vertical,
         public ScoreDto $diagonalLeft,
         public ScoreDto $diagonalRight
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<int,ScoreDto>

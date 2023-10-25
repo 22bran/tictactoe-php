@@ -10,6 +10,5 @@ readonly class Player
         public string $name,
         public FieldValue $stoneType,
         public bool $isComputer = false
-    ) {
-    }
+    ) {}
 }

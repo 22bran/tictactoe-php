@@ -8,8 +8,7 @@ class Field extends BaseField
 {
     public function __construct(
         public readonly FieldValue $value
-    ) {
-    }
+    ) {}
 
     public function isEmpty(): false
     {

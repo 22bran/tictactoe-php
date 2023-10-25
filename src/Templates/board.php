@@ -6,7 +6,7 @@ $this->layout('layout', ['title' => 'Game']) ?>
 
 <a href="/">Back to landing page</a> | <a href="/restart">Restart</a><br/><br/>
 <?php if ($game->started()): ?>
-<a href="/undo-move">Undo move</a> | 
+<a href="/undo-move">Undo move</a> |
 <?php endif ?>
 Board <?=$game->rows?> x <?=$game->columns?> | <?=$game->stones?> stones to win | <?=$game->remainingMoves()?> remaining moves</br/><br/>
 <table class="board">
@@ -24,7 +24,7 @@ Board <?=$game->rows?> x <?=$game->columns?> | <?=$game->stones?> stones to win 
                                 <span class="move stone"><a href="move?row=<?=$row?>&column=<?=$column?>"><?=$game->onTheMove->stoneType->toString()?></a></span>
                             <?php endif ?>
                         <?php else: ?>
-                            <span class="<?=(count($game->moves) > 0) && $row === $game->moves[count($game->moves) - 1]->row && $column === $game->moves[count($game->moves) - 1]->column ? 'lastStone' : 'stone'?>"><?=$field->value->toString()?></span>   
+                            <span class="<?=(count($game->moves) > 0) && $row === $game->moves[count($game->moves) - 1]->row && $column === $game->moves[count($game->moves) - 1]->column ? 'lastStone' : 'stone'?>"><?=$field->value->toString()?></span>
                         <?php endif ?>
                     </td>
                 <?php endforeach ?>

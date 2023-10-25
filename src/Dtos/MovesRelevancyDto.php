@@ -11,6 +11,5 @@ readonly class MovesRelevancyDto
     public function __construct(
         public array $movesRelevancy,
         public array $movesRelevancyDetail
-    ) {
-    }
+    ) {}
 }

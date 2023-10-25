@@ -11,6 +11,5 @@ readonly class PlayersScoreDto
     public function __construct(
         public array $player = [0 => []],
         public array $nextPlayer = [0 => []]
-    ) {
-    }
+    ) {}
 }

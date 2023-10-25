@@ -8,6 +8,5 @@ readonly class LastMoveDto
         public int $row,
         public int $column,
         public string $scoreDetail,
-    ) {
-    }
+    ) {}
 }

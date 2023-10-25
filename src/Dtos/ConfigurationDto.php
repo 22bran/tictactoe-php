@@ -12,8 +12,7 @@ readonly class ConfigurationDto
         public string $playerO,
         public bool $playerXisComputer,
         public bool $playerOisComputer
-    ) {
-    }
+    ) {}
 
     /**
      * @param array<string,string> $postData

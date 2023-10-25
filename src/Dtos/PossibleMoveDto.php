@@ -20,6 +20,5 @@ class PossibleMoveDto
         public readonly string $index,
         public readonly LastMoveDto $move,
         public array $children = [],
-    ) {
-    }
+    ) {}
 }

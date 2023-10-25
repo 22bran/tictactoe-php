@@ -68,7 +68,7 @@ class GameService
 
     private function getScoreDetailForDirection(ScoreDto $score, string $id): string
     {
-        return "$id:" . $score->score .' (' . $score->stonesCount . ")";
+        return "$id:" . $score->score . ' (' . $score->stonesCount . ")";
     }
 
     private function getScoreDetail(FieldValue $stoneType, AllDirectionsScoreDto $scorePlayer): string
@@ -146,7 +146,7 @@ class GameService
 
                     $scoreObj = new PlayersScoreDto($orderedScoresPlayer, $orderedScoresNextPlayer);
                     $score = $this->getMovesRelevancyScoreFromArray($scoreObj);
-                    $movesRelevancyDetail[$row][$column] = $this->getScoreDetail($stoneType, $scorePlayer). "\n" . $this->getScoreDetail($nextStoneType, $scoreNextPlayer) . "\nTotal score: $score";
+                    $movesRelevancyDetail[$row][$column] = $this->getScoreDetail($stoneType, $scorePlayer) . "\n" . $this->getScoreDetail($nextStoneType, $scoreNextPlayer) . "\nTotal score: $score";
 
                     if ($score >= $this->getMovesRelevancyScoreFromArray($lastScore)) {
                         $movesRelevancy[$row][$column] = $scoreObj;

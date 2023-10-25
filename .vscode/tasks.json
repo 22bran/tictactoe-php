@@ -34,7 +34,7 @@
       {
         "label": "Run PHP-CS-Fixer",
         "type": "shell",
-        "command": "docker-compose exec php app/vendor/bin/php-cs-fixer fix /app/src",
+        "command": "docker-compose exec php app/vendor/bin/php-cs-fixer fix /app/src --rules=@PER-CS2.0",
         "group": {
           "kind": "test",
           "isDefault": true

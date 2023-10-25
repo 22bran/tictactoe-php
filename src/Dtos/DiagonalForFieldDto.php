@@ -12,6 +12,5 @@ readonly class DiagonalForFieldDto
     public function __construct(
         public array $diagonal,
         public int $index
-    ) {
-    }
+    ) {}
 }

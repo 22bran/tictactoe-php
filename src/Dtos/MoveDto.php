@@ -7,8 +7,7 @@ readonly class MoveDto
     public function __construct(
         public int $row,
         public int $column
-    ) {
-    }
+    ) {}
 
     /**
      * @param array<string,string> $getData

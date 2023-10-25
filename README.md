@@ -25,7 +25,7 @@ To get this game up and running, you'll need Docker. Ensure you have both Docker
 1. **Clone the Repository**:
 
     ```bash
-    git clone https://github.com/22bran/tictactoe-php-frameworkless.git && cd tictactoe-php-frameworkless
+    git clone https://github.com/22bran/tictactoe-php.git && cd tictactoe-php
     ```
 2. **Build the Docker Container**:
 

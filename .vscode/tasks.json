@@ -1,0 +1,86 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Run PHPUnit tests",
+        "type": "shell",
+        "command": "docker-compose exec php app/vendor/bin/phpunit /app/tests",
+        "group": {
+          "kind": "test",
+          "isDefault": true
+        },
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "dedicated"
+        }
+      },
+      {
+        "label": "Run PHPStan check",
+        "type": "shell",
+        "command": "docker-compose exec php app/vendor/bin/phpstan analyse -l 9 /app/src /app/tests",
+        "group": {
+          "kind": "test",
+          "isDefault": true
+        },
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "dedicated"
+        }
+      },
+      {
+        "label": "Run PHP-CS-Fixer",
+        "type": "shell",
+        "command": "docker-compose exec php app/vendor/bin/php-cs-fixer fix /app/src",
+        "group": {
+          "kind": "test",
+          "isDefault": true
+        },
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "dedicated"
+        }
+      },
+      {
+        "label": "Build production image",
+        "type": "shell",
+        "command": "docker build -f Dockerfile-CloudRun -t europe-west3-docker.pkg.dev/php-tictactoe/cloud-run-source-deploy/tictactoe .",
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "dedicated"
+        }
+      },
+      {
+        "label": "Deploy production image",
+        "type": "shell",
+        "command": "docker push europe-west3-docker.pkg.dev/php-tictactoe/cloud-run-source-deploy/tictactoe",
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "dedicated"
+        }
+      },
+      {
+        "label": "Build and deploy production image",
+        "dependsOrder": "sequence",
+        "dependsOn": ["Build production image", "Deploy production image"]
+      }
+    ]
+  }
+  

@@ -1,0 +1,9 @@
+vendor/
+.vscode/
+.gitignore
+tests/
+.php-cs-fixer.cache
+xdebug.ini
+composer.lock
+docker-compose.yml
+README.md

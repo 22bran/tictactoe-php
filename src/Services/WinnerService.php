@@ -5,18 +5,15 @@ namespace TicTacToe\Services;
 use TicTacToe\Enums\FieldValue;
 use TicTacToe\Entities\BaseField;
 use TicTacToe\Entities\Field;
+use TicTacToe\Entities\Game;
+use TicTacToe\Helpers\ColumnsHelper;
 
 class WinnerService
 {
-    private ChainService $chainService;
-    private BoardService $boardService;
-
     public function __construct(
-
-    ) {
-        $this->chainService = new ChainService();
-        $this->boardService = new BoardService();
-    }
+        private readonly ChainService $chainService,
+        private readonly BoardService $boardService
+    ) {}
 
     /**
      * @param array<int,array<int,BaseField>> $lines
@@ -35,14 +32,14 @@ class WinnerService
     /**
      * @param array<int,array<int,BaseField>> $board
      */
-    private function findWinnerInDiagonal(int $rows, int $columns, int $stones, array $board, int $stonesCount, bool $rightToLeft): FieldValue|false
+    private function findWinnerInDiagonal(Game $game, array $board, bool $rightToLeft): FieldValue|false
     {
-        $columnStart = $rightToLeft ? $columns - 1 : 0;
-        $columnEnd = $rightToLeft ? 0 : $columns - $stones + 1;
+        $columnStart = $rightToLeft ? $game->columns - 1 : 0;
+        $columnEnd = $rightToLeft ? 0 : $game->columns - $game->stones + 1;
 
-        for ($row = 0; $row < ($rows - $stones + 1); $row++) {
+        for ($row = 0; $row < ($game->rows - $game->stones + 1); $row++) {
             for ($column = $columnStart; $rightToLeft ? $column >= $columnEnd : $column < $columnEnd; $rightToLeft ? $column-- : $column++) {
-                $diagonalWinner = $this->chainService->isWinner($stonesCount, ...$this->boardService->getDiagonal($board, $row, $column, $rightToLeft));
+                $diagonalWinner = $this->chainService->isWinner($game->stones, ...$this->boardService->getDiagonal($board, $row, $column, $rightToLeft));
                 if ($diagonalWinner !== false) {
                     return $diagonalWinner;
                 }
@@ -54,21 +51,21 @@ class WinnerService
     /**
      * @param array<int,array<int,BaseField>> $board
      */
-    public function winner(int $rows, int $columns, int $stones, array $board, int $stonesCount): FieldValue|false
+    public function winner(Game $game, array $board): FieldValue|false
     {
-        if ($winner = $this->findWinnerInLines($board, $stonesCount)) {
+        if ($winner = $this->findWinnerInLines($board, $game->stones)) {
             return $winner;
         }
 
-        if ($winner = $this->findWinnerInLines($this->getColumns($columns, $board), $stonesCount)) {
+        if ($winner = $this->findWinnerInLines(ColumnsHelper::getColumns($game->columns, $board), $game->stones)) {
             return $winner;
         }
 
-        if ($winner = $this->findWinnerInDiagonal($rows, $columns, $stones, $board, $stonesCount, false)) {
+        if ($winner = $this->findWinnerInDiagonal($game, $board, false)) {
             return $winner;
         }
 
-        if ($winner = $this->findWinnerInDiagonal($rows, $columns, $stones, $board, $stonesCount, true)) {
+        if ($winner = $this->findWinnerInDiagonal($game, $board, true)) {
             return $winner;
         }
 
@@ -96,23 +93,10 @@ class WinnerService
     /**
      * @param array<int,array<int,BaseField>> $board
      */
-    public function draw(int $rows, int $columns, int $stones, array $board, int $stonesCount, FieldValue $fieldValue): bool
+    public function draw(Game $game, array $board, FieldValue $fieldValue): bool
     {
-        $newBoard = $this->fillEmpty($rows, $columns, $board, $fieldValue);
+        $newBoard = $this->fillEmpty($game->rows, $game->columns, $board, $fieldValue);
 
-        return $this->winner($rows, $columns, $stones, $newBoard, $stonesCount) === false;
-    }
-
-    /**
-     * @param array<int,array<int,BaseField>> $board
-     * @return array<int,array<int,BaseField>>
-     */
-    public function getColumns(int $columnsCount, array $board): array
-    {
-        $columns = [];
-        for ($i = 0; $i < $columnsCount; $i++) {
-            $columns[] = array_column($board, $i);
-        }
-        return $columns;
+        return $this->winner($game, $newBoard) === false;
     }
 }

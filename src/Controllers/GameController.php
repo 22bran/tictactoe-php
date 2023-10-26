@@ -21,7 +21,6 @@ class GameController
     #[Route('GET', '/')]
     public function configuration(): void
     {
-        //unset($_SESSION['gameController']);
         echo $this->templates->render('configuration');
     }
 
@@ -30,11 +29,7 @@ class GameController
     {
         $game = $this->gameService->getGame();
         echo $this->templates->render('analyze', [
-            'moves' => $this->gameService->getAllRelevantMoves(
-                $game->board,
-                $game->onTheMove->stoneType,
-                true
-            ),
+            'moves' => $this->gameService->getMovesForAnalyze($game),
         ]);
     }
 

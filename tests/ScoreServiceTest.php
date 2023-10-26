@@ -2,38 +2,21 @@
 
 use PHPUnit\Framework\TestCase;
 use TicTacToe\Dtos\ConfigurationDto;
-use TicTacToe\Services\GameService;
 use TicTacToe\Enums\FieldValue;
 use TicTacToe\Entities\EmptyField;
 use TicTacToe\Entities\Field;
+use TicTacToe\Services\ScoreService;
+use TicTacToe\Entities\Game;
+use TicTacToe\Services\BoardService;
+use TicTacToe\Services\ChainService;
 
-final class GameServiceTest extends TestCase
+final class ScoreServiceTest extends TestCase
 {
-    private GameService $gameService;
-    private GameService $gameService8x8x5;
+    private ScoreService $scoreService;
 
     protected function setUp(): void
     {
-        $this->gameService = new GameService();
-        $this->gameService->start(new ConfigurationDto(
-            rows: 3,
-            columns: 3,
-            stones: 3,
-            playerX: 'player X',
-            playerO: 'player O',
-            playerXisComputer: false,
-            playerOisComputer: true
-        ));
-        $this->gameService8x8x5 = new GameService();
-        $this->gameService8x8x5->start(new ConfigurationDto(
-            rows: 8,
-            columns: 8,
-            stones: 5,
-            playerX: 'player X',
-            playerO: 'player O',
-            playerXisComputer: false,
-            playerOisComputer: true
-        ));
+        $this->scoreService = new ScoreService(new ChainService, new BoardService);
     }
 
     public function testVariousBestMovesFor8x8x5(): void
@@ -74,11 +57,17 @@ final class GameServiceTest extends TestCase
                 $_, $_, $_, $_, $_, $_, $_, $_
             ],
         ];
-
-        $allRelevantMoves = $this->gameService8x8x5->getAllRelevantMoves(
-            board: $board,
-            stoneType: FieldValue::X
-        );
+        $game = Game::createFromConfiguration(new ConfigurationDto(
+            rows: 8,
+            columns: 8,
+            stones: 5,
+            playerX: 'player X',
+            playerO: 'player O',
+            playerXisComputer: false,
+            playerOisComputer: true
+        ));
+        $game->board = $board;
+        $allRelevantMoves = $this->scoreService->getAllRelevantMoves($game);
         $scores = [];
         foreach($allRelevantMoves as $relevantMove) {
             if($relevantMove->score !== null) {
@@ -101,16 +90,16 @@ final class GameServiceTest extends TestCase
             'column' => 1,
         ]];
 
-        $this->assertEquals($expected, $this->move(0, 0, FieldValue::X));
-        $this->assertEquals($expected, $this->move(0, 1, FieldValue::X));
-        $this->assertEquals($expected, $this->move(0, 2, FieldValue::X));
+        $this->assertEquals($expected, $this->move(0, 0));
+        $this->assertEquals($expected, $this->move(0, 1));
+        $this->assertEquals($expected, $this->move(0, 2));
 
-        $this->assertEquals($expected, $this->move(1, 0, FieldValue::X));
-        $this->assertEquals($expected, $this->move(1, 2, FieldValue::X));
+        $this->assertEquals($expected, $this->move(1, 0));
+        $this->assertEquals($expected, $this->move(1, 2));
         
-        $this->assertEquals($expected, $this->move(2, 0, FieldValue::X));
-        $this->assertEquals($expected, $this->move(2, 1, FieldValue::X));
-        $this->assertEquals($expected, $this->move(2, 2, FieldValue::X));
+        $this->assertEquals($expected, $this->move(2, 0));
+        $this->assertEquals($expected, $this->move(2, 1));
+        $this->assertEquals($expected, $this->move(2, 2));
 
         $expected = [[
             'score' => 32,
@@ -130,19 +119,26 @@ final class GameServiceTest extends TestCase
             'column' => 2,
         ]];
 
-        $this->assertEquals($expected, $this->move(1, 1, FieldValue::X));
+        $this->assertEquals($expected, $this->move(1, 1));
     }
 
     /**
      * @return array<int,array<string,int>>
      */
-    private function move(int $row, int $column, FieldValue $stoneType): array {
-        $board = array_fill(0, 3, array_fill(0, 3, new EmptyField()));
-        $board[$row][$column] = new Field($stoneType);
-        $allRelevantMoves = $this->gameService->getAllRelevantMoves(
-            board: $board, 
-            stoneType: $stoneType === FieldValue::O ? FieldValue::X : FieldValue::O
-        );
+    private function move(int $row, int $column): array 
+    {    
+        $game = Game::createFromConfiguration(new ConfigurationDto(
+            rows: 3,
+            columns: 3,
+            stones: 3,
+            playerX: 'player X',
+            playerO: 'player O',
+            playerXisComputer: false,
+            playerOisComputer: false
+        ));
+        $game->board[$row][$column] = new Field(FieldValue::X);
+        $game->onTheMove = $game->playerO;
+        $allRelevantMoves = $this->scoreService->getAllRelevantMoves($game);
         $scores = [];
         foreach($allRelevantMoves as $relevantMove) {
             if($relevantMove->score !== null) {

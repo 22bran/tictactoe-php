@@ -32,7 +32,7 @@ To get this game up and running, you'll need Docker. Ensure you have both Docker
     Use Docker Compose to build and start the service:
 
     ```bash
-    docker-compose up --build -d
+    docker compose up --build -d
     ```
 
 3. **Install PHP Dependencies**:
@@ -40,7 +40,7 @@ To get this game up and running, you'll need Docker. Ensure you have both Docker
     Once the Docker container is running, install the PHP dependencies using Composer inside the container. You can achieve this by running the following command:
 
     ```bash
-    docker-compose exec php composer install
+    docker compose exec php composer install --working-dir='app'
     ```
 
 4. **Access the Application**:

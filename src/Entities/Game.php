@@ -4,13 +4,11 @@ namespace TicTacToe\Entities;
 
 use TicTacToe\Dtos\ConfigurationDto;
 use TicTacToe\Dtos\MoveDto;
-use TicTacToe\Entities\BaseField;
 use TicTacToe\Enums\FieldValue;
 
 class Game
 {
-    /** @var array<int,array<int,BaseField>> */
-    public array $board;
+    public Board $board;
     public Player $onTheMove;
     public Player|false $winner;
     public int $remainingMoves;
@@ -28,7 +26,7 @@ class Game
         public readonly Player $playerO
     ) {
         $this->startTime = time();
-        $this->board = array_fill(0, $rows, array_fill(0, $columns, new EmptyField()));
+        $this->board = new Board($rows, $columns);
         $this->winner = false;
         $this->onTheMove = $playerX;
         $this->remainingMoves = $rows * $columns;

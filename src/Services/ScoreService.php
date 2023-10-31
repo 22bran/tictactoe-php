@@ -5,12 +5,12 @@ namespace TicTacToe\Services;
 use TicTacToe\Dtos\MovesRelevancyDto;
 use TicTacToe\Enums\FieldValue;
 use TicTacToe\Entities\BaseField;
-use TicTacToe\Entities\Field;
 use TicTacToe\Dtos\PlayersScoreDto;
 use TicTacToe\Dtos\AllDirectionsScoreDto;
 use TicTacToe\Dtos\LastMoveDto;
 use TicTacToe\Dtos\PossibleMoveDto;
 use TicTacToe\Dtos\ScoreDto;
+use TicTacToe\Entities\Board;
 use TicTacToe\Entities\Game;
 use TicTacToe\Helpers\ColumnsHelper;
 
@@ -21,15 +21,12 @@ class ScoreService
         private readonly BoardService $boardService
     ) {}
 
-    /**
-     * @param array<int,array<int,BaseField>> $board
-     */
-    public function possibleToWinScore(Game $game, array $board, int $row, int $column, FieldValue $fieldValue): AllDirectionsScoreDto
+    public function possibleToWinScore(Game $game, Board $board, int $row, int $column, FieldValue $fieldValue): AllDirectionsScoreDto
     {
-        $modifiedBoard = $board;
-        $modifiedBoard[$row][$column] = new Field($fieldValue);
+        $modifiedBoard = clone $board;
+        $modifiedBoard->setField($row, $column, $fieldValue);
 
-        $scoreHorizontal = $this->chainService->getScore($game->stones, $column, ...$modifiedBoard[$row]);
+        $scoreHorizontal = $this->chainService->getScore($game->stones, $column, ...$modifiedBoard->get()[$row]);
 
         $columns = ColumnsHelper::getColumns($game->columns, $modifiedBoard);
         $scoreVertical = $this->chainService->getScore($game->stones, $row, ...$columns[$column]);
@@ -134,16 +131,13 @@ class ScoreService
         return ($finalScorePlayer + $finalScoreNextPlayer) * $max;
     }
 
-    /**
-     * @param array<int,array<int,BaseField>> $board
-     */
-    private function getMovesRelevancy(Game $game, array $board, FieldValue $stoneType, FieldValue $nextStoneType, PlayersScoreDto $lastScore): MovesRelevancyDto
+    private function getMovesRelevancy(Game $game, Board $board, FieldValue $stoneType, FieldValue $nextStoneType, PlayersScoreDto $lastScore): MovesRelevancyDto
     {
         $movesRelevancy = [];
         $movesRelevancyDetail = [];
         for ($row = 0; $row < $game->rows; $row++) {
             for ($column = 0; $column < $game->columns; $column++) {
-                if ($this->isEmpty($board[$row][$column])) {
+                if ($board->isEmpty($row, $column)) {
                     $scorePlayer = $this->possibleToWinScore($game, $board, $row, $column, $stoneType);
                     $scoreNextPlayer = $this->possibleToWinScore($game, $board, $row, $column, $nextStoneType);
                     $orderedScoresPlayer = $this->orderScores($scorePlayer);
@@ -197,16 +191,15 @@ class ScoreService
     }
 
     /**
-     * @param array<int,array<int,BaseField>> $board
      * @param array<int,array<int,PlayersScoreDto>> $movesRelevancy
      * @return array<int,array<int,PlayersScoreDto>>
      */
-    private function getMovesWithBestRelevancy(array $board, array $movesRelevancy): array
+    private function getMovesWithBestRelevancy(Board $board, array $movesRelevancy): array
     {
         $bestRelevancyScore = new PlayersScoreDto();
         $mostRelevantMoves = [];
 
-        foreach ($board as $row => $rowData) {
+        foreach ($board->get() as $row => $rowData) {
             foreach ($rowData as $column => $cell) {
                 if ($this->isEmpty($cell) && isset($movesRelevancy[$row][$column])) {
                     $currentScore = $this->getMovesRelevancyScoreFromArray($movesRelevancy[$row][$column]);
@@ -226,10 +219,9 @@ class ScoreService
     }
 
     /**
-     * @param array<int,array<int,BaseField>> $board
      * @return array<int,PossibleMoveDto>
      */
-    private function createNode(Game $game, array $board, FieldValue $stoneType, PlayersScoreDto $score, bool $maximizer, ?string $parentIndex): array
+    private function createNode(Game $game, Board $board, FieldValue $stoneType, PlayersScoreDto $score, bool $maximizer, ?string $parentIndex): array
     {
         $nextStoneType = $stoneType === FieldValue::X ? FieldValue::O : FieldValue::X;
         $movesRelevancyWithDetail = $this->getMovesRelevancy($game, $board, $stoneType, $nextStoneType, $score);
@@ -241,8 +233,8 @@ class ScoreService
             foreach($columns as $column => $scoreObject) {
                 $score = $this->getMovesRelevancyScoreFromArray($scoreObject);
                 $scoreDetail = isset($movesRelevancyDetail[$row][$column]) ? $movesRelevancyDetail[$row][$column] : '';
-                $newBoard = $board;
-                $newBoard[$row][$column] = new Field($stoneType);
+                $newBoard = clone $board;
+                $newBoard->setField($row, $column, $stoneType);
                 $node[] = new PossibleMoveDto(
                     maximizer: $maximizer,
                     board: $newBoard,

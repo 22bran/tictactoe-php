@@ -3,18 +3,18 @@
 namespace TicTacToe\Helpers;
 
 use TicTacToe\Entities\BaseField;
+use TicTacToe\Entities\Board;
 
 class ColumnsHelper
 {
     /**
-     * @param array<int,array<int,BaseField>> $board
      * @return array<int,array<int,BaseField>>
      */
-    public static function getColumns(int $columnsCount, array $board): array
+    public static function getColumns(int $columnsCount, Board $board): array
     {
         $columns = [];
         for ($i = 0; $i < $columnsCount; $i++) {
-            $columns[] = array_column($board, $i);
+            $columns[] = array_column($board->get(), $i);
         }
         return $columns;
     }

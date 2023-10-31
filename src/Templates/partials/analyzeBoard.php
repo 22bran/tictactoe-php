@@ -7,7 +7,7 @@ if (!isset($style) || !isset($move) || !isset($color)) {
 <table style="<?=$style?>" class="board">
     <tbody>
         <tr>
-            <?php foreach($move->board as $row => $columns): ?>
+            <?php foreach($move->board->get() as $row => $columns): ?>
                 <?php foreach($columns as $column => $field): ?>
                     <?php if ($column === array_key_first($columns)): ?>
                         </tr>
@@ -21,7 +21,7 @@ if (!isset($style) || !isset($move) || !isset($color)) {
                 <?php endforeach ?>
             <?php endforeach ?>
         </tr>
-        <tr><td colspan=<?=isset($move->board[0]) && count($move->board[0])?>>
+        <tr><td colspan=<?=$move->board->columns?>>
             <?=$move->score?>
         <td></tr>
     </tbody>

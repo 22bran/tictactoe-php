@@ -12,7 +12,7 @@ Board <?=$game->rows?> x <?=$game->columns?> | <?=$game->stones?> stones to win 
 <table class="board">
     <tbody>
         <tr>
-            <?php foreach($game->board as $row => $columns): ?>
+            <?php foreach($game->board->get() as $row => $columns): ?>
                 <?php foreach($columns as $column => $field): ?>
                     <?php if ($column === array_key_first($columns)): ?>
                         </tr>

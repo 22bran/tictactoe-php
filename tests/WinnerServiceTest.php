@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use TicTacToe\Dtos\ConfigurationDto;
+use TicTacToe\Entities\Board;
 use TicTacToe\Enums\FieldValue;
 use TicTacToe\Entities\EmptyField;
 use TicTacToe\Entities\Field;
@@ -33,7 +34,8 @@ final class WinnerServiceTest extends TestCase
             playerXisComputer: false,
             playerOisComputer: true
         ));
-        $board = [
+        $board = new Board(4, 4);
+        $board->set([
             [
                 $_, $_, $_, $_
             ],
@@ -46,12 +48,12 @@ final class WinnerServiceTest extends TestCase
             [
                 $_, $X, $X, $O
             ],
-        ];
+        ]);
         
         $winner = $this->winnerService->winner($game, $board);
         $this->assertEquals(FieldValue::O, $winner);
 
-        $board = [
+        $board->set([
             [
                 $O, $_, $_, $X
             ],
@@ -64,12 +66,12 @@ final class WinnerServiceTest extends TestCase
             [
                 $_, $X, $X, $O
             ],
-        ];
+        ]);
 
         $winner = $this->winnerService->winner($game, $board);
         $this->assertEquals(FieldValue::X, $winner);
 
-        $board = [
+        $board->set([
             [
                 $O, $_, $_, $X
             ],
@@ -82,12 +84,12 @@ final class WinnerServiceTest extends TestCase
             [
                 $_, $X, $X, $O
             ],
-        ];
+        ]);
 
         $winner = $this->winnerService->winner($game, $board);
         $this->assertEquals(FieldValue::X, $winner);
 
-        $board = [
+        $board->set([
             [
                 $O, $_, $_, $_
             ],
@@ -100,12 +102,12 @@ final class WinnerServiceTest extends TestCase
             [
                 $_, $X, $X, $O
             ],
-        ];
+        ]);
 
         $winner = $this->winnerService->winner($game, $board);
         $this->assertEquals(FieldValue::O, $winner);
 
-        $board = [
+        $board->set([
             [
                 $O, $_, $_, $_
             ],
@@ -118,7 +120,7 @@ final class WinnerServiceTest extends TestCase
             [
                 $_, $X, $X, $O
             ],
-        ];
+        ]);
 
         $winner = $this->winnerService->winner($game, $board);
         $this->assertEquals(false, $winner);
@@ -138,7 +140,8 @@ final class WinnerServiceTest extends TestCase
             playerXisComputer: false,
             playerOisComputer: true
         ));
-        $board = [
+        $board = new Board(4, 4);
+        $board->set([
             [
                 $_, $_, $_, $_
             ],
@@ -151,7 +154,7 @@ final class WinnerServiceTest extends TestCase
             [
                 $_, $X, $X, $O
             ],
-        ];
+        ]);
 
         $draw = $this->winnerService->draw($game, $board, FieldValue::O);
         $this->assertEquals(false, $draw);
@@ -166,7 +169,8 @@ final class WinnerServiceTest extends TestCase
             playerXisComputer: false,
             playerOisComputer: true
         ));
-        $board = [
+        $board = new Board(3, 3);
+        $board->set([
             [
                 $_, $X, $X
             ],
@@ -176,14 +180,14 @@ final class WinnerServiceTest extends TestCase
             [
                 $O, $O, $X
             ],
-        ];
+        ]);
 
         $draw = $this->winnerService->draw($game, $board, FieldValue::O);
         $this->assertEquals(true, $draw);
         $draw = $this->winnerService->draw($game, $board, FieldValue::X);
         $this->assertEquals(false, $draw);
 
-        $board = [
+        $board->set([
             [
                 $O, $X, $X
             ],
@@ -193,7 +197,7 @@ final class WinnerServiceTest extends TestCase
             [
                 $O, $O, $X
             ],
-        ];
+        ]);
 
         $draw = $this->winnerService->draw($game, $board, FieldValue::O);
         $this->assertEquals(true, $draw);

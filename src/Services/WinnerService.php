@@ -3,10 +3,10 @@
 namespace TicTacToe\Services;
 
 use TicTacToe\Enums\FieldValue;
-use TicTacToe\Entities\BaseField;
-use TicTacToe\Entities\Field;
+use TicTacToe\Entities\Board;
 use TicTacToe\Entities\Game;
 use TicTacToe\Helpers\ColumnsHelper;
+use TicTacToe\Entities\BaseField;
 
 class WinnerService
 {
@@ -16,11 +16,11 @@ class WinnerService
     ) {}
 
     /**
-     * @param array<int,array<int,BaseField>> $lines
+     * @param array<int,array<int,BaseField>> $board
      */
-    private function findWinnerInLines(array $lines, int $stonesCount): FieldValue|false
+    private function findWinnerInLines(array $board, int $stonesCount): FieldValue|false
     {
-        foreach($lines as $line) {
+        foreach($board as $line) {
             $winner = $this->chainService->isWinner($stonesCount, ...$line);
             if ($winner !== false) {
                 return $winner;
@@ -29,10 +29,7 @@ class WinnerService
         return false;
     }
 
-    /**
-     * @param array<int,array<int,BaseField>> $board
-     */
-    private function findWinnerInDiagonal(Game $game, array $board, bool $rightToLeft): FieldValue|false
+    private function findWinnerInDiagonal(Game $game, Board $board, bool $rightToLeft): FieldValue|false
     {
         $columnStart = $rightToLeft ? $game->columns - 1 : 0;
         $columnEnd = $rightToLeft ? 0 : $game->columns - $game->stones + 1;
@@ -48,12 +45,9 @@ class WinnerService
         return false;
     }
 
-    /**
-     * @param array<int,array<int,BaseField>> $board
-     */
-    public function winner(Game $game, array $board): FieldValue|false
+    public function winner(Game $game, Board $board): FieldValue|false
     {
-        if ($winner = $this->findWinnerInLines($board, $game->stones)) {
+        if ($winner = $this->findWinnerInLines($board->get(), $game->stones)) {
             return $winner;
         }
 
@@ -72,17 +66,13 @@ class WinnerService
         return false;
     }
 
-    /**
-     * @param array<int,array<int,BaseField>> $board
-     * @return array<int,array<int,BaseField>>
-     */
-    private function fillEmpty(int $rows, int $columns, array $board, FieldValue $fieldValue): array
+    private function fillEmpty(int $rows, int $columns, Board $board, FieldValue $fieldValue): Board
     {
-        $newBoard = $board;
+        $newBoard = clone $board;
         for ($row = 0; $row < $rows; $row++) {
             for ($column = 0; $column < $columns; $column++) {
-                if ($board[$row][$column]->isEmpty()) {
-                    $newBoard[$row][$column] = new Field($fieldValue);
+                if ($board->isEmpty($row, $column)) {
+                    $newBoard->setField($row, $column, $fieldValue);
                 }
             }
         }
@@ -90,10 +80,7 @@ class WinnerService
         return $newBoard;
     }
 
-    /**
-     * @param array<int,array<int,BaseField>> $board
-     */
-    public function draw(Game $game, array $board, FieldValue $fieldValue): bool
+    public function draw(Game $game, Board $board, FieldValue $fieldValue): bool
     {
         $newBoard = $this->fillEmpty($game->rows, $game->columns, $board, $fieldValue);
 

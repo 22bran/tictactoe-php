@@ -6,6 +6,7 @@ use TicTacToe\Enums\FieldValue;
 use TicTacToe\Entities\EmptyField;
 use TicTacToe\Entities\Field;
 use TicTacToe\Dtos\DiagonalForFieldDto;
+use TicTacToe\Entities\Board;
 
 final class BoardServiceTest extends TestCase
 {
@@ -21,7 +22,8 @@ final class BoardServiceTest extends TestCase
         $X = new Field(FieldValue::X);
         $O = new Field(FieldValue::O);
         $_ = new EmptyField();
-        $board = [
+        $board = new Board(8, 8);
+        $board->set([
             [
                 $_, $_, $_, $_, $_, $_, $_, $_
             ],
@@ -46,7 +48,7 @@ final class BoardServiceTest extends TestCase
             [
                 $_, $_, $_, $_, $_, $_, $_, $_
             ],
-        ];
+        ]);
 
         $diagonal = $this->boardService->getDiagonal($board, 0, 1, false);
         $this->assertEquals([$_,$O,$X,$X,$X,$X,$_], $diagonal);
@@ -66,7 +68,8 @@ final class BoardServiceTest extends TestCase
         $X = new Field(FieldValue::X);
         $O = new Field(FieldValue::O);
         $_ = new EmptyField();
-        $board = [
+        $board = new Board(8, 8);
+        $board->set([
             [
                 $_, $_, $_, $_, $_, $_, $_, $_
             ],
@@ -91,7 +94,7 @@ final class BoardServiceTest extends TestCase
             [
                 $_, $_, $_, $_, $_, $_, $_, $_
             ],
-        ];
+        ]);
 
         $diagonal = $this->boardService->getDiagonalForField($board, 2, 3, false);
         $this->assertEquals(new DiagonalForFieldDto([$_,$O,$X,$X,$X,$X,$_], 2), $diagonal);

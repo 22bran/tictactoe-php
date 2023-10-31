@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use TicTacToe\Dtos\ConfigurationDto;
+use TicTacToe\Entities\Board;
 use TicTacToe\Enums\FieldValue;
 use TicTacToe\Entities\EmptyField;
 use TicTacToe\Entities\Field;
@@ -31,7 +32,8 @@ final class ScoreServiceTest extends TestCase
         $X = new Field(FieldValue::X);
         $O = new Field(FieldValue::O);
         $_ = new EmptyField();
-        $board = [
+        $board = new Board(8, 8);
+        $board->set([
             [
                 $_, $_, $_, $_, $_, $_, $_, $_
             ],
@@ -56,7 +58,7 @@ final class ScoreServiceTest extends TestCase
             [
                 $_, $_, $_, $_, $_, $_, $_, $_
             ],
-        ];
+        ]);
         $game = Game::createFromConfiguration(new ConfigurationDto(
             rows: 8,
             columns: 8,
@@ -136,7 +138,7 @@ final class ScoreServiceTest extends TestCase
             playerXisComputer: false,
             playerOisComputer: false
         ));
-        $game->board[$row][$column] = new Field(FieldValue::X);
+        $game->board->setField($row, $column, FieldValue::X);
         $game->onTheMove = $game->playerO;
         $allRelevantMoves = $this->scoreService->getAllRelevantMoves($game);
         $scores = [];

@@ -4,11 +4,9 @@ namespace TicTacToe\Services;
 
 use TicTacToe\Enums\FieldValue;
 use TicTacToe\Entities\Player;
-use TicTacToe\Entities\Field;
 use TicTacToe\Dtos\ConfigurationDto;
 use TicTacToe\Entities\Game;
 use TicTacToe\Dtos\MoveDto;
-use TicTacToe\Entities\EmptyField;
 use TicTacToe\Dtos\PossibleMoveDto;
 use TicTacToe\Dtos\PlayersScoreDto;
 use TicTacToe\Dtos\LastMoveDto;
@@ -38,7 +36,7 @@ class GameService
     public function placeStone(int $row, int $column): void
     {
         $this->game->moves[] = new MoveDto($row, $column);
-        $this->game->board[$row][$column] = new Field($this->game->onTheMove->stoneType);
+        $this->game->board->setField($row, $column, $this->game->onTheMove->stoneType);
         $this->game->remainingMoves--;
         $this->game->winner = $this->fieldValueToPlayer($this->winnerService->winner(
             $this->game,
@@ -82,7 +80,7 @@ class GameService
             return;
         }
         $lastMove = array_pop($this->game->moves);
-        $this->game->board[$lastMove->row][$lastMove->column] = new EmptyField();
+        $this->game->board->setEmpty($lastMove->row, $lastMove->column);
         $this->game->remainingMoves++;
         $this->game->winner = false;
         $this->game->draw = false;

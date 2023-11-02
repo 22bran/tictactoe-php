@@ -8,7 +8,8 @@ readonly class AllDirectionsScoreDto
         public ScoreDto $horizontal,
         public ScoreDto $vertical,
         public ScoreDto $diagonalLeft,
-        public ScoreDto $diagonalRight
+        public ScoreDto $diagonalRight,
+        public bool $winningMove
     ) {}
 
     /**

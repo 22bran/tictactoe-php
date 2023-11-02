@@ -82,6 +82,150 @@ final class ScoreServiceTest extends TestCase
             }
         }
         $this->assertEquals($expected, $scores);
+
+        $board->set([
+            [
+                $_, $_, $_, $_, $_, $O, $_, $O
+            ],
+            [
+                $_, $_, $_, $_, $_, $_, $X, $_
+            ],
+            [
+                $O, $_, $_, $O, $O, $X, $_, $_
+            ],
+            [
+                $_, $X, $O, $X, $X, $X, $O, $_
+            ],
+            [
+                $_, $O, $X, $X, $O, $X, $_, $_
+            ],
+            [
+                $X, $X, $O, $X, $_, $X, $_, $_
+            ],
+            [
+                $O, $O, $X, $_, $O, $_, $_, $_
+            ],
+            [
+                $X, $_, $_, $O, $_, $_, $_, $_
+            ],
+        ]);
+        $game->board = $board;
+        $allRelevantMoves = $this->scoreService->getAllRelevantMoves($game);
+        $scores = [];
+        foreach($allRelevantMoves as $relevantMove) {
+            if($relevantMove->score !== null) {
+                $scores[] = [
+                    'score' => $relevantMove->score,
+                    'scoreDetail' => $relevantMove->move->scoreDetail,
+                    'row' => $relevantMove->move->row,
+                    'column' => $relevantMove->move->column,
+                ];
+            }
+        }
+        $expected = [[
+            'score' => 540,
+            'scoreDetail' => "X\tH:6 (2)\tV:0 (0)\tL:0 (0)\tR:0 (0)\nO\tH:3 (1)\tV:0 (0)\tL:0 (0)\tR:21 (5)\nTotal score: 540",
+            'row' => 1,
+            'column' => 4,
+        ]];
+
+        $this->assertEquals($expected, $scores);
+
+        $board->set([
+            [
+                $_, $_, $_, $_, $_, $_, $_, $_
+            ],
+            [
+                $_, $O, $_, $O, $_, $X, $_, $_
+            ],
+            [
+                $_, $O, $X, $X, $X, $_, $_, $_
+            ],
+            [
+                $_, $_, $_, $X, $O, $X, $_, $_
+            ],
+            [
+                $_, $_, $X, $X, $X, $O, $_, $_
+            ],
+            [
+                $_, $O, $O, $O, $X, $O, $_, $_
+            ],
+            [
+                $_, $O, $X, $X, $X, $O, $_, $_
+            ],
+            [
+                $_, $_, $_, $_, $O, $_, $_, $_
+            ],
+        ]);
+        $game->board = $board;
+        $allRelevantMoves = $this->scoreService->getAllRelevantMoves($game);
+        $scores = [];
+        foreach($allRelevantMoves as $relevantMove) {
+            if($relevantMove->score !== null) {
+                $scores[] = [
+                    'score' => $relevantMove->score,
+                    'scoreDetail' => $relevantMove->move->scoreDetail,
+                    'row' => $relevantMove->move->row,
+                    'column' => $relevantMove->move->column,
+                ];
+            }
+        }
+        $expected = [[
+            'score' => 535,
+            'scoreDetail' => "X\tH:3 (1)\tV:2 (1)\tL:0 (0)\tR:21 (5)\nO\tH:3 (1)\tV:2 (1)\tL:0 (0)\tR:0 (0)\nTotal score: 535",
+            'row' => 0,
+            'column' => 6,
+        ]];
+
+        $this->assertEquals($expected, $scores);
+
+        /*$board->set([
+            [
+                $_, $_, $_, $_, $_, $_, $_, $_
+            ],
+            [
+                $X, $O, $O, $O, $O, $X, $_, $_
+            ],
+            [
+                $_, $_, $O, $X, $X, $X, $O, $_
+            ],
+            [
+                $_, $_, $X, $O, $X, $_, $_, $_
+            ],
+            [
+                $_, $_, $_, $X, $X, $_, $_, $_
+            ],
+            [
+                $_, $_, $_, $_, $O, $_, $_, $_
+            ],
+            [
+                $_, $_, $_, $_, $_, $_, $_, $_
+            ],
+            [
+                $_, $_, $_, $_, $_, $_, $_, $_
+            ],
+        ]);
+        $game->board = $board;
+        $allRelevantMoves = $this->scoreService->getAllRelevantMoves($game);
+        $scores = [];
+        foreach($allRelevantMoves as $relevantMove) {
+            if($relevantMove->score !== null) {
+                $scores[] = [
+                    'score' => $relevantMove->score,
+                    'scoreDetail' => $relevantMove->move->scoreDetail,
+                    'row' => $relevantMove->move->row,
+                    'column' => $relevantMove->move->column,
+                ];
+            }
+        }
+        $expected = [[
+            'score' => 535,
+            'scoreDetail' => "X\tH:3 (1)\tV:2 (1)\tL:0 (0)\tR:21 (5)\nO\tH:3 (1)\tV:2 (1)\tL:0 (0)\tR:0 (0)\nTotal score: 535",
+            'row' => 5,
+            'column' => 2,
+        ]];
+
+        $this->assertEquals($expected, $scores);*/
     }
 
     public function testSecondMoveScoreFor3x3x3(): void

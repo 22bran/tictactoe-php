@@ -22,10 +22,10 @@ final class ChainServiceTest extends TestCase
         $O = new Field(FieldValue::O);
         $_ = new EmptyField();
 
-        $this->assertEquals(new ScoreDto(3, 11), $this->chainService->getScore(3, 0, $X, $X, $X));
+        $this->assertEquals(new ScoreDto(3, 11, true), $this->chainService->getScore(3, 0, $X, $X, $X));
         $this->assertEquals(new ScoreDto(1, 2), $this->chainService->getScore(3, 2, $_, $_, $O));
         $this->assertEquals(new ScoreDto(2, 7), $this->chainService->getScore(3, 1, $_, $O, $O));
-        $this->assertEquals(new ScoreDto(3, 11), $this->chainService->getScore(3, 0, $O, $O, $O));
+        $this->assertEquals(new ScoreDto(3, 11, true), $this->chainService->getScore(3, 0, $O, $O, $O));
         $this->assertEquals(new ScoreDto(2, 4), $this->chainService->getScore(3, 0, $O, $_, $O));
         $this->assertEquals(new ScoreDto(2, 7), $this->chainService->getScore(3, 0, $O, $O, $_));
         $this->assertEquals(new ScoreDto(1, 2), $this->chainService->getScore(3, 0, $O, $_, $_));
@@ -36,10 +36,10 @@ final class ChainServiceTest extends TestCase
         $this->assertEquals(new ScoreDto(0, 0), $this->chainService->getScore(3, 0, $O, $O, $X));
         $this->assertEquals(new ScoreDto(0, 0), $this->chainService->getScore(3, 0, $O, $X, $_));
 
-        $this->assertEquals(new ScoreDto(3, 11), $this->chainService->getScore(3, 1, $X, $X, $X));
+        $this->assertEquals(new ScoreDto(3, 11, true), $this->chainService->getScore(3, 1, $X, $X, $X));
         $this->assertEquals(new ScoreDto(1, 2), $this->chainService->getScore(3, 2, $_, $_, $O));
         $this->assertEquals(new ScoreDto(2, 7), $this->chainService->getScore(3, 1, $_, $O, $O));
-        $this->assertEquals(new ScoreDto(3, 11), $this->chainService->getScore(3, 1, $O, $O, $O));
+        $this->assertEquals(new ScoreDto(3, 11, true), $this->chainService->getScore(3, 1, $O, $O, $O));
         $this->assertEquals(new ScoreDto(2, 4), $this->chainService->getScore(3, 0, $O, $_, $O));
         $this->assertEquals(new ScoreDto(2, 7), $this->chainService->getScore(3, 1, $O, $O, $_));
         $this->assertEquals(new ScoreDto(1, 2), $this->chainService->getScore(3, 0, $O, $_, $_));
@@ -58,10 +58,10 @@ final class ChainServiceTest extends TestCase
         $_ = new EmptyField();
 
         $this->assertEquals(new ScoreDto(0, 0), $this->chainService->getScore(3, 1, $_, $_, $_, $_, $_));
-        $this->assertEquals(new ScoreDto(3, 12), $this->chainService->getScore(3, 1, $_, $X, $X, $X, $_));
+        $this->assertEquals(new ScoreDto(3, 12, true), $this->chainService->getScore(3, 1, $_, $X, $X, $X, $_));
         $this->assertEquals(new ScoreDto(1, 3), $this->chainService->getScore(3, 3, $_, $_, $_, $O, $_));
         $this->assertEquals(new ScoreDto(2, 8), $this->chainService->getScore(3, 2, $_, $_, $O, $O, $_));
-        $this->assertEquals(new ScoreDto(3, 12), $this->chainService->getScore(3, 1, $_, $O, $O, $O, $_));
+        $this->assertEquals(new ScoreDto(3, 12, true), $this->chainService->getScore(3, 1, $_, $O, $O, $O, $_));
         $this->assertEquals(new ScoreDto(2, 5), $this->chainService->getScore(3, 1, $_, $O, $_, $O, $_));
         $this->assertEquals(new ScoreDto(2, 8), $this->chainService->getScore(3, 1, $_, $O, $O, $_, $_));
         $this->assertEquals(new ScoreDto(1, 3), $this->chainService->getScore(3, 1, $_, $O, $_, $_, $_));
@@ -73,10 +73,10 @@ final class ChainServiceTest extends TestCase
         $this->assertEquals(new ScoreDto(0, 0), $this->chainService->getScore(3, 1, $_, $O, $X, $_, $_));
         $this->assertEquals(new ScoreDto(1, 2), $this->chainService->getScore(3, 2, $_, $O, $X, $_, $_));
 
-        $this->assertEquals(new ScoreDto(3, 12), $this->chainService->getScore(3, 1, $_, $X, $X, $X, $_));
+        $this->assertEquals(new ScoreDto(3, 12, true), $this->chainService->getScore(3, 1, $_, $X, $X, $X, $_));
         $this->assertEquals(new ScoreDto(1, 3), $this->chainService->getScore(3, 3, $_, $_, $_, $O, $_));
         $this->assertEquals(new ScoreDto(2, 8), $this->chainService->getScore(3, 2, $_, $_, $O, $O, $_));
-        $this->assertEquals(new ScoreDto(3, 12), $this->chainService->getScore(3, 1, $_, $O, $O, $O, $_));
+        $this->assertEquals(new ScoreDto(3, 12, true), $this->chainService->getScore(3, 1, $_, $O, $O, $O, $_));
         $this->assertEquals(new ScoreDto(2, 5), $this->chainService->getScore(3, 1, $_, $O, $_, $O, $_));
         $this->assertEquals(new ScoreDto(2, 8), $this->chainService->getScore(3, 1, $_, $O, $O, $_, $_));
         $this->assertEquals(new ScoreDto(1, 3), $this->chainService->getScore(3, 1, $_, $O, $_, $_, $_));
@@ -87,10 +87,10 @@ final class ChainServiceTest extends TestCase
         $this->assertEquals(new ScoreDto(2, 7), $this->chainService->getScore(3, 1, $_, $O, $O, $X, $_));
         $this->assertEquals(new ScoreDto(0, 0), $this->chainService->getScore(3, 1, $_, $O, $X, $_, $_));
 
-        $this->assertEquals(new ScoreDto(3, 13), $this->chainService->getScore(3, 2, $_, $X, $X, $X, $_));
+        $this->assertEquals(new ScoreDto(3, 13, true), $this->chainService->getScore(3, 2, $_, $X, $X, $X, $_));
         $this->assertEquals(new ScoreDto(1, 3), $this->chainService->getScore(3, 3, $_, $_, $_, $O, $_));
         $this->assertEquals(new ScoreDto(2, 8), $this->chainService->getScore(3, 2, $_, $_, $O, $O, $_));
-        $this->assertEquals(new ScoreDto(3, 13), $this->chainService->getScore(3, 2, $_, $O, $O, $O, $_));
+        $this->assertEquals(new ScoreDto(3, 13, true), $this->chainService->getScore(3, 2, $_, $O, $O, $O, $_));
         $this->assertEquals(new ScoreDto(2, 5), $this->chainService->getScore(3, 1, $_, $O, $_, $O, $_));
         $this->assertEquals(new ScoreDto(2, 8), $this->chainService->getScore(3, 2, $_, $O, $O, $_, $_));
         $this->assertEquals(new ScoreDto(1, 3), $this->chainService->getScore(3, 1, $_, $O, $_, $_, $_));
@@ -103,7 +103,7 @@ final class ChainServiceTest extends TestCase
 
         $this->assertEquals(new ScoreDto(3, 13), $this->chainService->getScore(5, 2, $_, $X, $X, $X, $_));
         $this->assertEquals(new ScoreDto(4, 18), $this->chainService->getScore(5, 2, $_, $X, $X, $X, $X, $_));
-        $this->assertEquals(new ScoreDto(5, 23), $this->chainService->getScore(5, 3, $_, $X, $X, $X, $X, $X, $_));
+        $this->assertEquals(new ScoreDto(5, 23, true), $this->chainService->getScore(5, 3, $_, $X, $X, $X, $X, $X, $_));
     }
 
     public function testChainWith8FieldsAnd3StonesTarget(): void
@@ -182,7 +182,7 @@ final class ChainServiceTest extends TestCase
         $this->assertEquals(new ScoreDto(4, 14), $this->chainService->getScore(5, 0, $X, $_, $X, $X, $X));
         $this->assertEquals(new ScoreDto(4, 17), $this->chainService->getScore(5, 1, $_, $X, $X, $X, $X));
 
-        $this->assertEquals(new ScoreDto(5, 21), $this->chainService->getScore(5, 0, $X, $X, $X, $X, $X));
+        $this->assertEquals(new ScoreDto(5, 21, true), $this->chainService->getScore(5, 0, $X, $X, $X, $X, $X));
     }
 
     public function testChainWith14FieldsAnd5StonesTarget(): void

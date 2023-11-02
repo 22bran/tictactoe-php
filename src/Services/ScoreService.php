@@ -36,8 +36,8 @@ class ScoreService
 
         $diagonalRight = $this->boardService->getDiagonalForField($modifiedBoard, $row, $column, true);
         $scoreDiagonalRight = $this->chainService->getScore($game->stones, $diagonalRight->index, ...$diagonalRight->diagonal);
-
-        return new AllDirectionsScoreDto($scoreHorizontal, $scoreVertical, $scoreDiagonalLeft, $scoreDiagonalRight);
+        $winningMove = $scoreHorizontal->winningMove || $scoreVertical->winningMove || $scoreDiagonalLeft->winningMove || $scoreDiagonalRight->winningMove;
+        return new AllDirectionsScoreDto($scoreHorizontal, $scoreVertical, $scoreDiagonalLeft, $scoreDiagonalRight, $winningMove);
     }
 
     /**
@@ -48,9 +48,21 @@ class ScoreService
     {
         foreach ($tree as $key => $node) {
             $nextStoneType = $node->stoneType === FieldValue::X ? FieldValue::O : FieldValue::X;
-            $children = $this->createNode($game, $node->board, $nextStoneType, $node->scoreObject, $maximizer, $node->index);
+            $children = $this->createNode(
+                game: $game,
+                board: $node->board,
+                stoneType: $nextStoneType,
+                score: $node->scoreObject,
+                maximizer: $maximizer,
+                parentIndex: $node->index
+            );
             if ($depth > 0) {
-                $tree[$key]->children = $this->createTreeOfMoves($game, $depth - 1, !$maximizer, $children);
+                $tree[$key]->children = $this->createTreeOfMoves(
+                    game: $game,
+                    depth: $depth - 1,
+                    maximizer: !$maximizer,
+                    tree: $children
+                );
             }
         }
 
@@ -140,6 +152,11 @@ class ScoreService
                 if ($board->isEmpty($row, $column)) {
                     $scorePlayer = $this->possibleToWinScore($game, $board, $row, $column, $stoneType);
                     $scoreNextPlayer = $this->possibleToWinScore($game, $board, $row, $column, $nextStoneType);
+                    $winningMove = $scorePlayer->winningMove || $scoreNextPlayer->winningMove;
+                    if ($winningMove) {
+                        $movesRelevancy = [];
+                        $movesRelevancyDetail = [];
+                    }
                     $orderedScoresPlayer = $this->orderScores($scorePlayer);
                     $orderedScoresNextPlayer = $this->orderScores($scoreNextPlayer);
 
@@ -147,8 +164,11 @@ class ScoreService
                     $score = $this->getMovesRelevancyScoreFromArray($scoreObj);
                     $movesRelevancyDetail[$row][$column] = $this->getScoreDetail($stoneType, $scorePlayer) . "\n" . $this->getScoreDetail($nextStoneType, $scoreNextPlayer) . "\nTotal score: $score";
 
-                    if ($score >= $this->getMovesRelevancyScoreFromArray($lastScore)) {
+                    if ($score >= $this->getMovesRelevancyScoreFromArray($lastScore) || $winningMove) {
                         $movesRelevancy[$row][$column] = $scoreObj;
+                    }
+                    if ($winningMove) {
+                        break 2;
                     }
                 }
             }
@@ -255,11 +275,20 @@ class ScoreService
      */
     public function getAllRelevantMoves(Game $game): array
     {
-        $board = $game->board;
-        $stoneType = $game->onTheMove->stoneType;
-
-        $root = $this->createNode($game, $board, $stoneType, new PlayersScoreDto(), true, null);
-        $moves = $this->createTreeOfMoves($game, 2, false, $root);
+        $root = $this->createNode(
+            game: $game,
+            board: $game->board,
+            stoneType: $game->onTheMove->stoneType,
+            score: new PlayersScoreDto(),
+            maximizer: true,
+            parentIndex: null
+        );
+        $moves = $this->createTreeOfMoves(
+            game: $game,
+            depth: 2,
+            maximizer: false,
+            tree: $root
+        );
         if (count($moves) > 1) {
             $bestParentBranchesScore = $this->findBestScoreForParentBranches($moves);
             $bestMoves = array_filter($moves, function ($data, $key) use ($bestParentBranchesScore) { return in_array($key, $bestParentBranchesScore); }, ARRAY_FILTER_USE_BOTH);

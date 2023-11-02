@@ -47,7 +47,7 @@ class ChainService
                     $line[] = 1;
                 } else {
                     if (count($line) >= $stones) {
-                        return new ScoreDto(array_sum($line), $this->boostScore($line));
+                        return new ScoreDto(array_sum($line), $this->boostScore($line), $this->isWinner($stones, ...$fields) !== false);
                     }
                     $line = [];
                 }
@@ -55,7 +55,7 @@ class ChainService
         }
 
         if (count($line) >= $stones) {
-            return new ScoreDto(array_sum($line), $this->boostScore($line));
+            return new ScoreDto(array_sum($line), $this->boostScore($line), $this->isWinner($stones, ...$fields) !== false);
         } else {
             return new ScoreDto();
         }

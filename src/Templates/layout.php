@@ -11,19 +11,32 @@ if (!isset($this) || !isset($title)) {
     <style>
         body {
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background-color: #FFF8E7;
+            color: #555555;
         }
-        span {
-            color: red;
+        input[type="checkbox"] {
+            accent-color: #555555;
+            filter: brightness(96%);
+        }
+        input {
+            background-color: papayawhip;
+            border: 1px dashed #555555;
+            color: #555555;
+        }
+        input:disabled {
+            background-color: lightgray;
+            border: 1px dashed #555555;
+            color: #555555;
         }
         .board {
             border-spacing: 0;
             border-collapse: collapse;
         }
         .layout {
-            border-right: 2px black;
-            border-top: 2px black;
-            border-left: 2px black;
-            border-style: solid;
+            border-right: 1px #555555;
+            border-top: 1px #555555;
+            border-left: 1px #555555;
+            border-style: dashed;
             border-bottom: 0px;
         }
         .layout td {
@@ -31,18 +44,19 @@ if (!isset($this) || !isset($title)) {
             vertical-align: top;
         }
         .boardtd {
-            border: 1px solid black;
+            border: 1px dashed #555555;
             width: 42px;
             min-width: 42px;
             height: 42px;
             text-align: center;
+            background-color: papayawhip;
         }
         span.stone {
             font-size: xx-large;
         }
         span.lastStone {
             font-size: xx-large;
-            color: black;
+            color: #FF6B6B;
         }
         .move {
             visibility: hidden;

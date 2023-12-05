@@ -4,7 +4,7 @@
       {
         "label": "Run PHPUnit tests",
         "type": "shell",
-        "command": "docker-compose exec php app/vendor/bin/phpunit /app/tests",
+        "command": "docker compose exec php app/vendor/bin/phpunit app/tests",
         "group": {
           "kind": "test",
           "isDefault": true
@@ -19,7 +19,7 @@
       {
         "label": "Run PHPStan check",
         "type": "shell",
-        "command": "docker-compose exec php app/vendor/bin/phpstan analyse -l 9 /app/src /app/tests",
+        "command": "docker compose exec php app/vendor/bin/phpstan analyse -l 9 app/src app/tests",
         "group": {
           "kind": "test",
           "isDefault": true
@@ -34,7 +34,7 @@
       {
         "label": "Run PHP-CS-Fixer",
         "type": "shell",
-        "command": "docker-compose exec php app/vendor/bin/php-cs-fixer fix /app/src --rules=@PER-CS2.0",
+        "command": "docker compose exec php app/vendor/bin/php-cs-fixer fix app/src --rules=@PER-CS2.0",
         "group": {
           "kind": "test",
           "isDefault": true

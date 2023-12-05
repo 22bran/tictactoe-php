@@ -16,6 +16,8 @@ use TicTacToe\Helpers\ColumnsHelper;
 
 class ScoreService
 {
+    private const string NODE_SEPARATOR = '-';
+
     public function __construct(
         private readonly ChainService $chainService,
         private readonly BoardService $boardService
@@ -84,7 +86,7 @@ class ScoreService
             $queue[] = $child;
         }
         $isLast = count($queue) === 0;
-        $index = explode('-', $node->index);
+        $index = explode(self::NODE_SEPARATOR, $node->index);
         $level = count($index);
         $levelBefore = $isLast ? $level : $level - 1;
         $isMaximizer = $isLast ? $node->maximizer === true : $node->maximizer === false;
@@ -261,7 +263,7 @@ class ScoreService
                     scoreObject: $scoreObject,
                     score: $score,
                     stoneType: $stoneType,
-                    index: strval($parentIndex !== null ? $parentIndex . '-' . count($node) : count($node)),
+                    index: strval($parentIndex !== null ? $parentIndex . self::NODE_SEPARATOR . count($node) : count($node)),
                     move: new LastMoveDto($row, $column, $scoreDetail)
                 );
             }

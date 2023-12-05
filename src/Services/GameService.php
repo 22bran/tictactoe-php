@@ -2,6 +2,7 @@
 
 namespace TicTacToe\Services;
 
+use Random\Randomizer;
 use TicTacToe\Enums\FieldValue;
 use TicTacToe\Entities\Player;
 use TicTacToe\Dtos\ConfigurationDto;
@@ -114,7 +115,8 @@ class GameService
                 }
             }
             if ($bestMove === null) {
-                $randomBestMoveKey = array_rand($bestMoves, 1);
+                $r = new Randomizer();
+                $randomBestMoveKey = $r->pickArrayKeys($bestMoves, 1)[0];
                 $bestMove = $bestMoves[$randomBestMoveKey];
             }
         } else {

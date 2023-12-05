@@ -6,7 +6,7 @@ use TicTacToe\Enums\FieldValue;
 
 class Board
 {
-    private const START_INDEX = 0;
+    private const int START_INDEX = 0;
 
     /** @var array<int,array<int,BaseField>> */
     private array $board;

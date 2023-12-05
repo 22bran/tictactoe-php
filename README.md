@@ -2,7 +2,7 @@
 
 This project is an advanced implementation of the classic TicTacToe game, built primarily as a playground for two pursuits:
 
-1. **Exploring New PHP Versions**: With the rapid evolution of PHP, I wanted a hands-on environment to test, understand, and adapt to the latest features and nuances of the language. This project is currently set up with PHP 8.2, allowing for exploration of its capabilities.
+1. **Exploring New PHP Versions**: With the rapid evolution of PHP, I wanted a hands-on environment to test, understand, and adapt to the latest features and nuances of the language. This project is currently set up with PHP 8.3, allowing for exploration of its capabilities.
 
 2. **Experimenting With Game Algorithms**: The AI logic in this game integrates a combination of the MinMax algorithm, scoring techniques, and recursive exploration. Building a game like TicTacToe has offered a comprehensive platform to comprehend, implement, and optimize these methods for generating AI-based move recommendations.
 
